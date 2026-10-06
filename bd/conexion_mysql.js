@@ -1,18 +1,22 @@
-const mysql = require('mysql');
-const database = {
-    host : 'localhost',
-    user : 'tele2026',
-    password : '2026tele',
-    database : 'datos'
-};
+const { createClient } = require('@supabase/supabase-js');
 
-const conexion = mysql.createConnection(database);
+// 1. Carga las credenciales desde las variables de entorno de tu servidor
+// Asegúrate de que coincidan exactamente con las del dashboard de Supabase
+const SUPABASE_URL = 'https://omqdwavqyokpsfxgmfjn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gtp4PbDxYgCpRxA4X6cAIA_Bh1nQh95';
 
-conexion.connect(function (err) {
-    if (err) {
-        console.error('Error en la conexión de la base de datos:',err);
-        process.exit();
-    }
-});
+// 2. Validación previa del formato de la URL
+if (!SUPABASE_URL || !SUPABASE_URL.startsWith('https://')) {
+  console.error('Error: SUPABASE_URL no es válida, debe empezar con https://');
+  process.exit(1);
+}
+
+if (!SUPABASE_KEY) {
+  console.error('Error: La API Key de Supabase está vacía o no se ha cargado.');
+  process.exit(1);
+}
+
+// 3. Inicialización del cliente
+const conexion = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 module.exports = conexion;
